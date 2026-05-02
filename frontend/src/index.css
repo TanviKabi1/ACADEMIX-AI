@@ -1,0 +1,264 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --bg-void: #05050A;
+    --bg-surface: #090C15;
+    --neon-cyan: #00F0FF;
+    --neon-purple: #B026FF;
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --text-muted: #475569;
+}
+
+@layer base {
+    :root {
+        --background: 240 25% 3%;
+        --foreground: 210 40% 98%;
+        --card: 230 28% 7%;
+        --card-foreground: 210 40% 98%;
+        --popover: 230 28% 7%;
+        --popover-foreground: 210 40% 98%;
+        --primary: 186 100% 50%;
+        --primary-foreground: 240 25% 3%;
+        --secondary: 230 28% 11%;
+        --secondary-foreground: 210 40% 98%;
+        --muted: 230 28% 11%;
+        --muted-foreground: 215 20% 65%;
+        --accent: 278 100% 57%;
+        --accent-foreground: 210 40% 98%;
+        --destructive: 0 84% 60%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 186 100% 50% / 0.2;
+        --input: 230 28% 11%;
+        --ring: 186 100% 50%;
+        --radius: 0.5rem;
+    }
+}
+
+* {
+    border-color: hsl(var(--border));
+}
+
+html, body, #root {
+    background-color: var(--bg-void);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+}
+
+body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(176, 38, 255, 0.08), transparent 50%),
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(0, 240, 255, 0.06), transparent 50%),
+        var(--bg-void);
+    background-attachment: fixed;
+}
+
+.font-display { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.02em; }
+.font-mono { font-family: 'JetBrains Mono', monospace; }
+
+/* ---- Glass surface ---- */
+.glass {
+    background: rgba(9, 12, 21, 0.6);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    border: 1px solid rgba(0, 240, 255, 0.15);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+.glass:hover {
+    border-color: rgba(0, 240, 255, 0.5);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.2);
+}
+.glass-purple {
+    background: rgba(9, 12, 21, 0.6);
+    backdrop-filter: blur(16px) saturate(150%);
+    border: 1px solid rgba(176, 38, 255, 0.2);
+    box-shadow: 0 0 20px rgba(176, 38, 255, 0.08);
+}
+
+/* ---- Neon cutout (clipped corner) ---- */
+.cut-corner {
+    clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+}
+
+/* ---- Grid overlay ---- */
+.grid-bg {
+    background-image:
+        linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
+    background-position: center center;
+    mask-image: radial-gradient(ellipse 80% 60% at center, black 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at center, black 40%, transparent 100%);
+}
+
+/* ---- Neon text ---- */
+.neon-cyan { color: #00F0FF; text-shadow: 0 0 12px rgba(0, 240, 255, 0.45); }
+.neon-purple { color: #B026FF; text-shadow: 0 0 12px rgba(176, 38, 255, 0.45); }
+.text-gradient {
+    background: linear-gradient(90deg, #00F0FF, #B026FF 60%, #00F0FF);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: grad-shift 6s linear infinite;
+}
+@keyframes grad-shift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+/* ---- Animated underline for nav ---- */
+.nav-link {
+    position: relative;
+    color: var(--text-secondary);
+    transition: color 0.2s;
+}
+.nav-link::after {
+    content: '';
+    position: absolute; left: 0; bottom: -6px;
+    width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, #00F0FF, transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+.nav-link:hover { color: #00F0FF; }
+.nav-link:hover::after { transform: scaleX(1); }
+
+/* ---- Glowing button ---- */
+.btn-neon {
+    position: relative;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.85rem;
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.12), rgba(176, 38, 255, 0.12));
+    border: 1px solid rgba(0, 240, 255, 0.5);
+    color: #E2FEFF;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+.btn-neon:hover {
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(176, 38, 255, 0.2));
+    border-color: #00F0FF;
+    box-shadow: 0 0 24px rgba(0, 240, 255, 0.4), inset 0 0 12px rgba(0, 240, 255, 0.15);
+    color: #fff;
+}
+.btn-neon-solid {
+    background: linear-gradient(135deg, #00F0FF, #00C7D8);
+    color: #05050A;
+    border-color: #00F0FF;
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+}
+.btn-neon-solid:hover {
+    background: linear-gradient(135deg, #7CFFFF, #00F0FF);
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.8);
+    color: #05050A;
+}
+.btn-ghost {
+    background: transparent;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    color: #CBD5E1;
+}
+.btn-ghost:hover { border-color: rgba(0, 240, 255, 0.5); color: #00F0FF; }
+
+/* ---- Input ---- */
+.neon-input {
+    background: rgba(5, 5, 10, 0.6);
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    color: #F8FAFC;
+    padding: 0.75rem 1rem;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+    width: 100%;
+    border-radius: 6px;
+}
+.neon-input:focus {
+    outline: none;
+    border-color: rgba(176, 38, 255, 0.7);
+    box-shadow: 0 0 0 3px rgba(176, 38, 255, 0.18);
+}
+.neon-input::placeholder { color: #475569; }
+
+/* ---- Scrollbar ---- */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #05050A; }
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(0, 240, 255, 0.4), rgba(176, 38, 255, 0.4));
+    border-radius: 4px;
+}
+
+/* ---- Pulse glow ---- */
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 12px rgba(0, 240, 255, 0.3); }
+    50% { box-shadow: 0 0 28px rgba(0, 240, 255, 0.7); }
+}
+.pulse-glow { animation: pulse-glow 2.2s ease-in-out infinite; }
+
+@keyframes float-y {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+.float-y { animation: float-y 4s ease-in-out infinite; }
+
+/* ---- Blink cursor ---- */
+@keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+.caret::after { content: '▋'; margin-left: 2px; color: #00F0FF; animation: blink 1s steps(1) infinite; }
+
+/* ---- Scan line ---- */
+@keyframes scan {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+.scan-line { position: relative; overflow: hidden; }
+.scan-line::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent, rgba(0, 240, 255, 0.25), transparent);
+    animation: scan 3s linear infinite;
+    pointer-events: none;
+}
+
+/* ---- RAG node pulse ---- */
+@keyframes node-pulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.08); }
+}
+.node-pulse { animation: node-pulse 1.8s ease-in-out infinite; }
+
+/* ---- Flow line ---- */
+@keyframes flow {
+    0% { stroke-dashoffset: 24; }
+    100% { stroke-dashoffset: 0; }
+}
+.flow-line { stroke-dasharray: 4 4; animation: flow 0.8s linear infinite; }
+
+/* ---- Animated radial background ---- */
+.radial-bg::before {
+    content: ''; position: absolute; inset: -20%;
+    background: radial-gradient(closest-side, rgba(176, 38, 255, 0.12), transparent 70%),
+                radial-gradient(closest-side, rgba(0, 240, 255, 0.12), transparent 70%);
+    background-position: 30% 40%, 70% 60%;
+    background-size: 60% 60%, 60% 60%;
+    background-repeat: no-repeat;
+    animation: float-y 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ---- Sidebar active indicator ---- */
+.sidebar-item-active {
+    background: linear-gradient(90deg, rgba(0, 240, 255, 0.08), transparent);
+    border-left: 2px solid #00F0FF;
+    color: #00F0FF;
+}
