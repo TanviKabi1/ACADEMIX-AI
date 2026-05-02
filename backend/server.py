@@ -7,7 +7,9 @@ load_dotenv(ROOT_DIR / ".env")
 from fastapi import FastAPI, APIRouter, UploadFile, File, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from starlette.middleware.cors import CORSMiddleware
-from db_sqlite import SQLiteDB
+from db import db
+
+
 import os
 import logging
 import uuid
@@ -36,8 +38,8 @@ load_dotenv(ROOT_DIR / ".env")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger("academix")
 
-db_path = "database.db"
-db = SQLiteDB(db_path)
+# DB initialized via import
+
 
 app = FastAPI(title="ACADEMIX AI")
 api = APIRouter(prefix="/api")
