@@ -9,10 +9,19 @@ from pypdf import PdfReader
 import docx
 from llm_service import embed_text, embed_query
 
-CHROMA_DIR = os.environ.get("CHROMA_DIR", "chroma_store")
-UPLOAD_DIR = os.environ.get("UPLOAD_DIR", "uploads")
-Path(CHROMA_DIR).mkdir(parents=True, exist_ok=True)
-Path(UPLOAD_DIR).mkdir(parents=True, exist_ok=True)
+if os.environ.get("VERCEL"):
+    CHROMA_DIR = "/tmp/chroma_store"
+    UPLOAD_DIR = "/tmp/uploads"
+else:
+    CHROMA_DIR = os.environ.get("CHROMA_DIR", "chroma_store")
+    UPLOAD_DIR = os.environ.get("UPLOAD_DIR", "uploads")
+
+try:
+    Path(CHROMA_DIR).mkdir(parents=True, exist_ok=True)
+    Path(UPLOAD_DIR).mkdir(parents=True, exist_ok=True)
+except Exception as e:
+    print(f"Warning: Could not create directories: {e}")
+
 
 # Lazy singletons
 _chroma_client = None
@@ -21,10 +30,17 @@ _collection = None
 def get_collection():
     global _chroma_client, _collection
     if _collection is None:
-        _chroma_client = chromadb.PersistentClient(
-            path=CHROMA_DIR,
-            settings=Settings(anonymized_telemetry=False),
-        )
+        if os.environ.get("VERCEL"):
+            # Use EphemeralClient if persistent fails or to avoid disk issues
+            _chroma_client = chromadb.EphemeralClient(
+                settings=Settings(anonymized_telemetry=False)
+            )
+        else:
+            _chroma_client = chromadb.PersistentClient(
+                path=CHROMA_DIR,
+                settings=Settings(anonymized_telemetry=False),
+            )
+
         _collection = _chroma_client.get_or_create_collection(
             name="academix_gemini_chunks_v2",
             metadata={"hnsw:space": "cosine"},
