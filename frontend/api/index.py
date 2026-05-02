@@ -4,7 +4,7 @@ from pathlib import Path
 
 # Add the root directory and backend directory to the path
 current_dir = Path(__file__).parent
-root_dir = current_dir.parent
+root_dir = current_dir.parent.parent
 backend_dir = root_dir / "backend"
 
 sys.path.append(str(root_dir))
